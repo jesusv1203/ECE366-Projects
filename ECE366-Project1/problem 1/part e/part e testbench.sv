@@ -1,4 +1,4 @@
-`timescale 1ns/1ps
+
 
 module four_bit_RCA_RCS_tb;
 
@@ -8,7 +8,7 @@ module four_bit_RCA_RCS_tb;
     wire [3:0] S;
     wire Cout;
     
-    four_bit_RCA_RCS uut (
+    four_bit_RCA_RCS DUT (
         .A(A),
         .B(B),
         .Cin(Cin),
