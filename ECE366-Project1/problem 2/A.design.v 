@@ -1,0 +1,507 @@
+module one_bit_full_adder(A, B, Cin, S, Cout);
+
+   input A, B, Cin;
+   output S, Cout;
+   wire temp1, temp2, temp3, temp4;
+   
+   xor xor1(temp1, A , B);
+   xor xor2(S,  temp1, Cin);
+   
+   and and1(temp2, A, Cin);
+   and and2(temp3, B, Cin);
+   and and3(temp4, A, B);
+   
+   or or_out(Cout, temp2, temp3, temp4);
+   
+ endmodule
+
+module four_bit_RCA(A, B, Cin, S, Cout);
+ 
+  input [3:0] A, B;
+  input Cin;
+  output [3:0] S;
+  output Cout;
+  
+  wire c1, c2, c3;
+  
+  one_bit_full_adder fa0(A[0], B[0], Cin, S[0], c1);
+  one_bit_full_adder fa1(A[1], B[1], c1, S[1], c2);
+  one_bit_full_adder fa2(A[2], B[2], c2, S[2], c3);
+  one_bit_full_adder fa3(A[3], B[3], c3, S[3], Cout);
+  
+endmodule
+
+//healper moudule for PG COMBINE 
+
+module combine_PG(
+    P_high,
+    G_high,
+    P_low,
+    G_low,
+    Pout,
+    Gout
+);
+
+    input P_high, G_high;
+    input P_low, G_low;
+
+    output Pout, Gout;
+
+    wire temp;
+
+    // Pout = P_high * P_low
+    and (Pout, P_high, P_low);
+
+    // Gout = G_high + P_high*G_low
+    and (temp, P_high, G_low);
+    or  (Gout, G_high, temp);
+
+endmodule
+
+module CLA(A, B, Cin, S, Cout);
+
+  input [31:0] A, B;
+  input Cin;
+  output [31:0] S;
+  output Cout;
+  
+  wire c4, c8, c12, c16, c20, c24, c28, c32;
+  
+  wire [31:0] p;
+  wire [31:0] g;
+  
+  // Bits 0-3
+  or  (p[0], A[0], B[0]);
+  or  (p[1], A[1], B[1]);
+  or  (p[2], A[2], B[2]);
+  or  (p[3], A[3], B[3]);
+
+  and (g[0], A[0], B[0]);
+  and (g[1], A[1], B[1]);
+  and (g[2], A[2], B[2]);
+  and (g[3], A[3], B[3]);
+
+
+    // Bits 4-7
+  or  (p[4], A[4], B[4]);
+  or  (p[5], A[5], B[5]);
+  or  (p[6], A[6], B[6]);
+  or  (p[7], A[7], B[7]);
+
+  and (g[4], A[4], B[4]);
+  and (g[5], A[5], B[5]);
+  and (g[6], A[6], B[6]);
+  and (g[7], A[7], B[7]);
+
+
+    // Bits 8-11
+  or  (p[8],  A[8],  B[8]);
+  or  (p[9],  A[9],  B[9]);
+  or  (p[10], A[10], B[10]);
+  or  (p[11], A[11], B[11]);
+
+  and (g[8],  A[8],  B[8]);
+  and (g[9],  A[9],  B[9]);
+  and (g[10], A[10], B[10]);
+  and (g[11], A[11], B[11]);
+
+
+    // Bits 12-15
+  or  (p[12], A[12], B[12]);
+  or  (p[13], A[13], B[13]);
+  or  (p[14], A[14], B[14]);
+  or  (p[15], A[15], B[15]);
+
+  and (g[12], A[12], B[12]);
+  and (g[13], A[13], B[13]);
+  and (g[14], A[14], B[14]);
+  and (g[15], A[15], B[15]);
+
+    // Bits 16-19
+  or  (p[16], A[16], B[16]);
+  or  (p[17], A[17], B[17]);
+  or  (p[18], A[18], B[18]);
+  or  (p[19], A[19], B[19]);
+
+  and (g[16], A[16], B[16]);
+  and (g[17], A[17], B[17]);
+  and (g[18], A[18], B[18]);
+  and (g[19], A[19], B[19]);
+
+
+    // Bits 20-23
+  or  (p[20], A[20], B[20]);
+  or  (p[21], A[21], B[21]);
+  or  (p[22], A[22], B[22]);
+  or  (p[23], A[23], B[23]);
+
+  and (g[20], A[20], B[20]);
+  and (g[21], A[21], B[21]);
+  and (g[22], A[22], B[22]);
+  and (g[23], A[23], B[23]);
+
+
+    // Bits 24-27
+  or  (p[24], A[24], B[24]);
+  or  (p[25], A[25], B[25]);
+  or  (p[26], A[26], B[26]);
+  or  (p[27], A[27], B[27]);
+  
+  and (g[24], A[24], B[24]);
+  and (g[25], A[25], B[25]);
+  and (g[26], A[26], B[26]);
+  and (g[27], A[27], B[27]);
+
+
+    // Bits 28-31
+  or  (p[28], A[28], B[28]);
+  or  (p[29], A[29], B[29]);
+  or  (p[30], A[30], B[30]);
+  or  (p[31], A[31], B[31]);
+
+  and (g[28], A[28], B[28]);
+  and (g[29], A[29], B[29]);
+  and (g[30], A[30], B[30]);
+  and (g[31], A[31], B[31]);
+  
+  
+  wire P0, P1, P2, P3, P4, P5, P6, P7;
+
+  wire G0, G1, G2, G3, G4, G5, G6, G7;
+  
+  // BLOCK 0 : BITS [3:0]
+
+  wire P0a, P0b;
+
+  and (P0a, p[0], p[1]);
+  and (P0b, p[2], p[3]);
+  and (P0, P0a, P0b);
+
+
+  wire G0t1;
+  wire G0t2a, G0t2;
+  wire G0t3a, G0t3b, G0t3;
+  wire G0o1, G0o2;
+
+    // p3*g2
+  and (G0t1, p[3], g[2]);
+
+    // p3*p2*g1
+  and (G0t2a, p[3], p[2]);
+  and (G0t2, G0t2a, g[1]);
+
+    // p3*p2*p1*g0
+  and (G0t3a, p[3], p[2]);
+  and (G0t3b, G0t3a, p[1]);
+  and (G0t3, G0t3b, g[0]);
+
+  or (G0o1, g[3], G0t1);
+  or (G0o2, G0o1, G0t2);
+  or (G0, G0o2, G0t3);
+  
+  // BLOCK 1 : BITS [7:4]
+  
+   wire P1a, P1b;
+
+  and (P1a, p[4], p[5]);
+  and (P1b, p[6], p[7]);
+  and (P1, P1a, P1b);
+
+
+  wire G1t1;
+  wire G1t2a, G1t2;
+  wire G1t3a, G1t3b, G1t3;
+  wire G1o1, G1o2;
+
+  and (G1t1, p[7], g[6]);
+
+  and (G1t2a, p[7], p[6]);
+  and (G1t2, G1t2a, g[5]);
+
+  and (G1t3a, p[7], p[6]);
+  and (G1t3b, G1t3a, p[5]);
+  and (G1t3, G1t3b, g[4]);
+
+  or (G1o1, g[7], G1t1);
+  or (G1o2, G1o1, G1t2);
+  or (G1, G1o2, G1t3);
+  
+   // BLOCK 2 : BITS [11:8]
+  
+   wire P2a, P2b;
+
+  and (P2a, p[8], p[9]);
+  and (P2b, p[10], p[11]);
+  and (P2, P2a, P2b);
+
+
+  wire G2t1;
+  wire G2t2a, G2t2;
+  wire G2t3a, G2t3b, G2t3;
+  wire G2o1, G2o2;
+
+  and (G2t1, p[11], g[10]);
+
+  and (G2t2a, p[11], p[10]);
+  and (G2t2, G2t2a, g[9]);
+
+  and (G2t3a, p[11], p[10]);
+  and (G2t3b, G2t3a, p[9]);
+  and (G2t3, G2t3b, g[8]);
+  
+  or (G2o1, g[11], G2t1);
+  or (G2o2, G2o1, G2t2);
+  or (G2, G2o2, G2t3);
+  
+  // BLOCK 3 : BITS [15:12]
+  
+  
+  wire P3a, P3b;
+
+  and (P3a, p[12], p[13]);
+  and (P3b, p[14], p[15]);
+  and (P3, P3a, P3b);
+
+
+  wire G3t1;
+  wire G3t2a, G3t2;
+  wire G3t3a, G3t3b, G3t3;
+  wire G3o1, G3o2;
+
+  and (G3t1, p[15], g[14]);
+
+  and (G3t2a, p[15], p[14]);
+  and (G3t2, G3t2a, g[13]);
+
+  and (G3t3a, p[15], p[14]);
+  and (G3t3b, G3t3a, p[13]);
+  and (G3t3, G3t3b, g[12]);
+
+  or (G3o1, g[15], G3t1);
+  or (G3o2, G3o1, G3t2);
+  or (G3, G3o2, G3t3);
+  
+  // BLOCK 4 : BITS [19:16]
+  
+  wire P4a, P4b;
+
+    and (P4a, p[16], p[17]);
+    and (P4b, p[18], p[19]);
+    and (P4, P4a, P4b);
+
+
+    wire G4t1;
+    wire G4t2a, G4t2;
+    wire G4t3a, G4t3b, G4t3;
+    wire G4o1, G4o2;
+
+    and (G4t1, p[19], g[18]);
+
+    and (G4t2a, p[19], p[18]);
+    and (G4t2, G4t2a, g[17]);
+
+    and (G4t3a, p[19], p[18]);
+    and (G4t3b, G4t3a, p[17]);
+    and (G4t3, G4t3b, g[16]);
+
+    or (G4o1, g[19], G4t1);
+    or (G4o2, G4o1, G4t2);
+    or (G4, G4o2, G4t3);
+
+
+    
+    // BLOCK 5 : BITS [23:20]
+   
+  wire P5a, P5b;
+
+  and (P5a, p[20], p[21]);
+  and (P5b, p[22], p[23]);
+  and (P5, P5a, P5b);
+
+
+  wire G5t1;
+  wire G5t2a, G5t2;
+  wire G5t3a, G5t3b, G5t3;
+  wire G5o1, G5o2;
+
+  and (G5t1, p[23], g[22]);
+
+  and (G5t2a, p[23], p[22]);
+  and (G5t2, G5t2a, g[21]);
+
+  and (G5t3a, p[23], p[22]);
+  and (G5t3b, G5t3a, p[21]);
+  and (G5t3, G5t3b, g[20]);
+
+  or (G5o1, g[23], G5t1);
+  or (G5o2, G5o1, G5t2);
+  or (G5, G5o2, G5t3);
+  
+  // BLOCK 6 : BITS [27:24]
+  
+  wire P6a, P6b;
+
+  and (P6a, p[24], p[25]);
+  and (P6b, p[26], p[27]);
+  and (P6, P6a, P6b);
+
+
+  wire G6t1;
+  wire G6t2a, G6t2;
+  wire G6t3a, G6t3b, G6t3;
+  wire G6o1, G6o2;
+
+  and (G6t1, p[27], g[26]);
+  
+  and (G6t2a, p[27], p[26]);
+  and (G6t2, G6t2a, g[25]);
+
+  and (G6t3a, p[27], p[26]);
+  and (G6t3b, G6t3a, p[25]);
+  and (G6t3, G6t3b, g[24]);
+
+  or (G6o1, g[27], G6t1);
+  or (G6o2, G6o1, G6t2);
+  or (G6, G6o2, G6t3);
+  
+  // BLOCK 7 : BITS [31:28]
+  
+  wire P7a, P7b;
+
+  and (P7a, p[28], p[29]);
+  and (P7b, p[30], p[31]);
+  and (P7, P7a, P7b);
+
+
+  wire G7t1;
+  wire G7t2a, G7t2;
+  wire G7t3a, G7t3b, G7t3;
+  wire G7o1, G7o2;
+
+  and (G7t1, p[31], g[30]);
+
+  and (G7t2a, p[31], p[30]);
+  and (G7t2, G7t2a, g[29]);
+
+  and (G7t3a, p[31], p[30]);
+  and (G7t3b, G7t3a, p[29]);
+  and (G7t3, G7t3b, g[28]);
+
+  or (G7o1, g[31], G7t1);
+  or (G7o2, G7o1, G7t2);
+  or (G7, G7o2, G7t3);
+  
+  // COMBINE
+  
+  wire P01, G01;
+  wire P012, G012;
+  wire P0123, G0123;
+  wire P01234, G01234;
+  wire P012345, G012345;
+  wire P0123456, G0123456;
+  wire P01234567, G01234567;
+  
+   // Blocks 0-1
+  combine_PG cg1(P1, G1, P0, G0, P01, G01);
+
+
+    // Blocks 0-2
+  combine_PG cg2(P2, G2,P01, G01, P012, G012);
+
+
+    // Blocks 0-3
+  combine_PG cg3(P3, G3, P012, G012, P0123, G0123);
+
+
+    // Blocks 0-4
+  combine_PG cg4(P4, G4, P0123, G0123, P01234, G01234);
+
+
+    // Blocks 0-5
+  combine_PG cg5(P5, G5, P01234, G01234, P012345, G012345);
+
+
+    // Blocks 0-6
+    combine_PG cg6(P6, G6, P012345, G012345, P0123456, G0123456);
+
+
+    // Blocks 0-7
+    combine_PG cg7(P7, G7, P0123456, G0123456, P01234567, G01234567);
+  
+  // CARRY eq
+  
+  wire ct0, ct1, ct2, ct3;
+  wire ct4, ct5, ct6, ct7;
+
+
+    // c4 = G0 + P0*Cin
+  and (ct0, P0, Cin);
+  or  (c4, G0, ct0);
+
+
+    // c8 = G01 + P01*Cin
+  and (ct1, P01, Cin);
+  or  (c8, G01, ct1);
+
+
+    // c12
+  and (ct2, P012, Cin);
+  or  (c12, G012, ct2);
+
+
+    // c16
+  and (ct3, P0123, Cin);
+  or  (c16, G0123, ct3);
+
+
+    // c20
+  and (ct4, P01234, Cin);
+  or  (c20, G01234, ct4);
+
+
+    // c24
+  and (ct5, P012345, Cin);
+  or  (c24, G012345, ct5);
+
+
+    // c28
+  and (ct6, P0123456, Cin);
+  or  (c28, G0123456, ct6);
+
+
+    // c32
+  and (ct7, P01234567, Cin);
+  or  (c32, G01234567, ct7);
+  
+   // 8 FOUR-BIT RCA BLOCKS
+  
+  wire rca0_out, rca1_out, rca2_out, rca3_out;
+    wire rca4_out, rca5_out, rca6_out, rca7_out;
+
+
+  four_bit_RCA rca0(A[3:0], B[3:0], Cin, S[3:0], rca0_out);
+
+
+  four_bit_RCA rca1(A[7:4], B[7:4], c4, S[7:4], rca1_out);
+
+
+  four_bit_RCA rca2(A[11:8], B[11:8], c8, S[11:8], rca2_out);
+
+
+  four_bit_RCA rca3(A[15:12], B[15:12], c12, S[15:12], rca3_out);
+
+
+  four_bit_RCA rca4(A[19:16], B[19:16], c16, S[19:16], rca4_out);
+
+
+  four_bit_RCA rca5(A[23:20], B[23:20], c20, S[23:20], rca5_out);
+
+  four_bit_RCA rca6(A[27:24], B[27:24], c24, S[27:24], rca6_out);
+
+
+  four_bit_RCA rca7(A[31:28], B[31:28], c28, S[31:28], rca7_out);
+
+
+    // Final carry-out
+    assign Cout = c32;
+endmodule
