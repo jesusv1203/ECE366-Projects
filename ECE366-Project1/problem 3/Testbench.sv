@@ -2,10 +2,10 @@
 
 module PPA_tb;
 
-  reg [31:0] A, B;
+  reg [15:0] A, B;
   reg Cin;
 
-  wire [31:0] S;
+  wire [15:0] S;
   wire Cout;
     
   PPA DUT (.A(A), .B(B), .Cin(Cin), .S(S), .Cout(Cout));
@@ -13,7 +13,7 @@ module PPA_tb;
     initial begin
 
         $dumpfile("dump.vcd");
-        $dumpvars(0, PPA_tb);
+        $dumpvars(1, PPA_tb);
 
 
         A = 16'h0003;
