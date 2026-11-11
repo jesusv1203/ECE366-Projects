@@ -48,5 +48,5 @@ endloop:
 
 small:
     
-    move $v0, $a0 # return n
+    move $v0, $a0 # return n if n is smaller then one
     jr $ra
