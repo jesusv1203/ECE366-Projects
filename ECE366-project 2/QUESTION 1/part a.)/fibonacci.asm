@@ -1,6 +1,6 @@
 
 .data
-n:      .word 10          # number we want to tesr
+n:      .word 10          # number we want to test
 result: .word 0          # stores the fibonacci result
 
 .text
