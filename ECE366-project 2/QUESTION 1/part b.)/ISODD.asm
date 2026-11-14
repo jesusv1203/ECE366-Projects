@@ -11,8 +11,6 @@ main:
     syscall
 
 
-.text
-.globl IsOdd
 
 # IsOdd(m)
 # Input: $a0 = m
