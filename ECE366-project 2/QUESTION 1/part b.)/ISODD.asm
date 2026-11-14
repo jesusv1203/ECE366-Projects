@@ -2,8 +2,8 @@
 .globl main
 
 main:
-    li   $a0, 11       # Test number m = 7
-    jal  IsOdd        # Call IsOdd(7)
+    li   $a0, 11       # Test number m = #
+    jal  IsOdd        # Call IsOdd(m)
 
     move $t3, $v0     # Save answer in $t3
 
@@ -40,19 +40,19 @@ endIsOdd:
     jr   $ra
 
 
-# division(x, y)
-# Input: $a0 = x, $a1 = y
+# division(x, 2)
+# Input: $a0 = x, $a1 = 2
 # Output: $v0 = remainder
 
 division:
     move $t0, $a0       # x = input
-    move $t1, $a1       # y = divisor
+    move $t1, $a1       # 2 = divisor
     li   $t2, 0         # quotient = 0
 
 while:
-    blt  $t0, $t1, done # while x >= y
+    blt  $t0, $t1, done # while x >= 2
 
-    sub  $t0, $t0, $t1  # x = x - y
+    sub  $t0, $t0, $t1  # x = x - 2
     addi $t2, $t2, 1   # quotient = quotient + 1
     j    while
 
