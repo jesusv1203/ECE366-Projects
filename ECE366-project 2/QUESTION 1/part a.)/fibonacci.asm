@@ -38,5 +38,27 @@ fibonacci:
     # Set loop counter to n - 1
     addi $t2, $a0, -1
 
+    fib_loop:
+    # Add previous two Fibonacci numbers
+    add $t3, $t0, $t1
+
+    # Update a and b
+    move $t0, $t1
+    move $t1, $t3
+
+    # Decrease counter by 1
+    addi $t2, $t2, -1
+
+    # Repeat loop if counter > 0
+    bgtz $t2, fib_loop
+
+    # Return Fibonacci result
+    move $v0, $t1
+    jr $ra
+return_n:
+    move $v0, $a0       # Return n when n <= 1
+    jr $ra              # Return to main
+
+ 
 
  
