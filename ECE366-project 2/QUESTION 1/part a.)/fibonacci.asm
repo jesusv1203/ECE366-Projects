@@ -58,7 +58,3 @@ fibonacci:
 return_n:
     move $v0, $a0       # Return n when n <= 1
     jr $ra              # Return to main
-
- 
-
- 
